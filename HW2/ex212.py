@@ -1,8 +1,6 @@
 import numpy as np
 from skimage import io as io_url
 import matplotlib.pyplot as plt
-import cv2
-
 
 
 def DFT_slow(data):

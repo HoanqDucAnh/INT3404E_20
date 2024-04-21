@@ -2,7 +2,6 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import math
-import os
 
 
 def read_img(img_path):
