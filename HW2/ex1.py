@@ -27,7 +27,10 @@ def padding_img(img, filter_size=3):
         padded_img: cv2 image: the padding image
     """
     # Need to implement here
-    padded_img = np.pad(img, ((filter_size//2, filter_size//2), (filter_size//2, filter_size//2)), mode='edge')
+    pad_size = filter_size // 2
+    padded_img = [[img[min(max(i-pad_size, 0), img.shape[0]-1)][min(max(j-pad_size, 0), img.shape[1]-1)]
+                   for j in range(img.shape[1] + 2*pad_size)]
+                  for i in range(img.shape[0] + 2*pad_size)]
     return padded_img
 
 
@@ -46,7 +49,8 @@ def mean_filter(img, filter_size=3):
     smoothed_img = np.zeros_like(img)
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
-            smoothed_img[i, j] = np.mean(padded_img[i:i+filter_size, j:j+filter_size])
+            neighborhood = [padded_img[i+k][j+l] for k in range(filter_size) for l in range(filter_size)]
+            smoothed_img[i, j] = sum(neighborhood) / (filter_size * filter_size)
     return smoothed_img
 
 def median_filter(img, filter_size=3):
@@ -64,7 +68,9 @@ def median_filter(img, filter_size=3):
     smoothed_img = np.zeros_like(img)
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
-            smoothed_img[i, j] = np.median(padded_img[i:i+filter_size, j:j+filter_size])
+            neighborhood = [padded_img[i+k][j+l] for k in range(filter_size) for l in range(filter_size)]
+            neighborhood.sort()
+            smoothed_img[i, j] = neighborhood[len(neighborhood) // 2]
     return smoothed_img
 
 
